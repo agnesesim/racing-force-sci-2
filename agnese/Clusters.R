@@ -63,3 +63,44 @@ for (p1 in patents[["patent_id"]]){
 
 save(m, file = "agnese/matrix/matrix_adiac_title.RData")
 write.table(m, file="agnese/matrix/title_correlation.txt", col.names = NA)
+
+tmp_m = m
+diag(tmp_m) <- 1
+
+g = graph_from_adjacency_matrix(tmp_m)
+p <- plot(g,
+          vertex.size = 20,
+          vertex.color = "white",
+          vertex.shape = "square",
+          vertex.label = letters[1:vcount(g)],
+          edge.width = 2,
+          edge.color = "black",
+          edge.lty = 3,
+          edge.label = LETTERS[1:ecount(g)],
+          edge.curved = TRUE)
+
+
+# cosine similarity
+euclidean = function(x) {sqrt(x %*% x)}
+d = apply(tmp_m, 2, euclidean)
+D = diag(1/d)
+S = D %*% t(tmp_m) %*% tmp_m %*% D
+
+# distance matrix
+D = 1-S
+# distance object
+d = as.dist(D)
+d[is.na(d)]
+d[is.nan(d)]
+sum(is.infinite(d)) # THIS SHOULD BE 0
+
+# average-linkage clustering method
+cc = hclust(d, method = "average")
+# plot dendrogram
+plot(cc)
+
+clusters = cutree(cc, k = 10)
+# plot graph with clusters
+coords = layout_with_fr(g)
+plot(g, vertex.color=clusters, layout=coords)
+
