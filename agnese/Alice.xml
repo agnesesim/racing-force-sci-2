@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="v_age" for="node" attr.name="age" attr.type="double"/>
+  <key id="v_gender" for="node" attr.name="gender" attr.type="string"/>
+  <key id="e_sameDept" for="edge" attr.name="sameDept" attr.type="boolean"/>
+  <key id="e_friendship" for="edge" attr.name="friendship" attr.type="double"/>
+  <key id="e_advice" for="edge" attr.name="advice" attr.type="double"/>
+  <graph id="G" edgedefault="directed">
+    <node id="n0">
+      <data key="v_name">Alice</data>
+      <data key="v_age">48</data>
+      <data key="v_gender">F</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">Bob</data>
+      <data key="v_age">33</data>
+      <data key="v_gender">M</data>
+    </node>
+    <node id="n2">
+      <data key="v_name">Cecil</data>
+      <data key="v_age">45</data>
+      <data key="v_gender">F</data>
+    </node>
+    <node id="n3">
+      <data key="v_name">David</data>
+      <data key="v_age">34</data>
+      <data key="v_gender">M</data>
+    </node>
+    <node id="n4">
+      <data key="v_name">Esmeralda</data>
+      <data key="v_age">21</data>
+      <data key="v_gender">F</data>
+    </node>
+    <edge source="n1" target="n0">
+      <data key="e_sameDept">false</data>
+      <data key="e_friendship">4</data>
+      <data key="e_advice">4</data>
+    </edge>
+    <edge source="n2" target="n1">
+      <data key="e_sameDept">false</data>
+      <data key="e_friendship">5</data>
+      <data key="e_advice">5</data>
+    </edge>
+    <edge source="n2" target="n0">
+      <data key="e_sameDept">true</data>
+      <data key="e_friendship">5</data>
+      <data key="e_advice">5</data>
+    </edge>
+    <edge source="n3" target="n0">
+      <data key="e_sameDept">false</data>
+      <data key="e_friendship">2</data>
+      <data key="e_advice">4</data>
+    </edge>
+    <edge source="n3" target="n1">
+      <data key="e_sameDept">false</data>
+      <data key="e_friendship">1</data>
+      <data key="e_advice">2</data>
+    </edge>
+    <edge source="n4" target="n0">
+      <data key="e_sameDept">true</data>
+      <data key="e_friendship">1</data>
+      <data key="e_advice">3</data>
+    </edge>
+  </graph>
+</graphml>
