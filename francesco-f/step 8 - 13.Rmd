@@ -1,0 +1,107 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(SnowballC)
+library(lubridate)
+```
+
+```{r}
+patents <- read_csv('FINALE.csv')
+patents %>% head()
+
+```
+remove off-topic
+```{r}
+patents <- patents %>% filter(tags != 'offtopic')
+```
+
+```{r}
+patents <- patents %>% mutate(cluster = case_when(tags %in% c('pilot monitoring', 'road monitoring','vehicle classification', 'speed & trajectory', 'gps') ~ 'monitoring', 
+                               tags %in% c('anomaly detection', 'survillance', 'safety', 'insurance', 'damage') ~ 'insurance', 
+                               tags %in% c('gaming', 'simulation', 'esport', 'sport') ~ 'sport', 
+                               tags %in% c('accessories', 'quantum computing', 'image analysis', 'generico') ~ 'misc'
+                               ))
+```
+
+```{r}
+df <- patents %>% group_by(cluster) %>%
+  count() %>% ungroup() %>% 
+  mutate(perc = `n` / sum(`n`)) %>% 
+  arrange(perc) %>%
+  mutate(labels = scales::percent(perc))
+
+df %>% ggplot(aes(x = "", y = perc, fill = cluster)) +
+    geom_col() +
+    geom_text(aes(label = labels),
+              position = position_stack(vjust = 0.5)) +
+    theme_void() +
+    coord_polar(theta = "y")
+```
+
+```{r}
+
+df <- patents %>% group_by(tags) %>%
+  count() %>% ungroup() %>% 
+  mutate(perc = `n` / sum(`n`)) %>% 
+  arrange(perc) %>%
+  mutate(labels = scales::percent(perc))
+
+df %>% ggplot(aes(x = "", y = perc, fill = tags)) +
+    geom_col() +
+    geom_text(aes(label = labels),
+              position = position_stack(vjust = 0.5)) +
+  theme_void()+
+    coord_polar(theta = "y")
+
+```
+
+
+```{r}
+sport = patents %>% filter(tags == 'esport' | tags == 'sport' | tags == 'simulation' | tags == 'gaming') 
+patents %>% head()
+```
+
+
+```{r}
+sport %>% group_by(year(priority_date)) %>% count()
+```
+
+```{r}
+sport %>% select(priority_date, tags) %>%
+  group_by(priority_date=year(priority_date), tags) %>% count() %>% 
+  ggplot(mapping = aes(x=priority_date, y=n, fill=tags)) +
+               geom_bar(stat="identity") 
+```
+
+```{r}
+sport %>% select(assignee_,  tags) %>%
+  group_by(assignee_) %>% count() %>% arrange(desc(n))
+```
+
+```{r}
+
+sport <- sport %>% mutate(assignee_ = case_when(
+  str_detect(assignee, regex('microsoft', ignore_case = T)) ~ 'MICROSOFT', 
+  str_detect(assignee, regex('sony', ignore_case = T)) ~ 'SONY', 
+  str_detect(assignee, regex('toyota', ignore_case = T)) ~ 'TOYOTA',
+  str_detect(assignee, regex('ibm', ignore_case = T)) ~ 'IBM', 
+  TRUE ~ assignee
+))
+```
+
+
+```{r}
+sport %>% select(assignee,  tags) %>%
+  group_by(assignee) %>% count() %>%
+  ggplot(mapping = aes(x=assignee, y=n)) +
+               geom_bar(stat="identity") + coord_flip()
+```
+
+
+
